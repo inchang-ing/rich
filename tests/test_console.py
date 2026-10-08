@@ -34,6 +34,14 @@ from rich.text import Text
 os.get_terminal_size
 
 
+@pytest.fixture(autouse=True)
+def _isolate_terminal_size_env(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Console reads COLUMNS/LINES from the environment; remove any inherited
+    values so size-related tests don't depend on the shell exporting them."""
+    monkeypatch.delenv("COLUMNS", raising=False)
+    monkeypatch.delenv("LINES", raising=False)
+
+
 def test_dumb_terminal() -> None:
     console = Console(force_terminal=True, _environ={})
     assert console.color_system is not None
