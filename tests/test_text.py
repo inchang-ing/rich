@@ -483,6 +483,13 @@ def test_wrap_wrapped_word_length_greater_than_available_width():
     ]
 
 
+def test_wrap_zero_width_does_not_raise():
+    text = Text("hello world")
+    # width=0 previously raised ValueError in chop_cells (range step 0).
+    lines = text.wrap(Console(), 0)
+    assert len(lines._lines) >= 1
+
+
 def test_wrap_cjk():
     text = Text("わさび")
     lines = text.wrap(Console(), 4)

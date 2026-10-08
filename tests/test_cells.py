@@ -134,6 +134,12 @@ def test_chop_cells_mixed_width():
     assert chop_cells(text, 3) == ["あ1", "り2", "34", "が5", "と6", "う7", "8"]
 
 
+def test_chop_cells_zero_width_parameter():
+    """chop_cells must not raise for width=0 and should return the text intact."""
+    assert chop_cells("hello world", 0) == ["hello world"]
+    assert chop_cells("你好", 0) == ["你好"]
+
+
 @pytest.mark.parametrize(
     "text,expected",
     [
