@@ -60,3 +60,13 @@ def test_title():
         None,
         [(ControlType.SET_WINDOW_TITLE, "hello")],
     )
+
+
+def test_strip_control_codes_nul_and_escape():
+    # https://github.com/Textualize/rich/issues/4233
+    assert strip_control_codes("a\x00b\x1bc") == "abc"
+
+
+def test_escape_control_codes_nul_and_escape():
+    # https://github.com/Textualize/rich/issues/4233
+    assert escape_control_codes("a\x00b\x1bc") == "a\\0b\\x1bc"

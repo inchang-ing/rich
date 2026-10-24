@@ -7,22 +7,26 @@ if TYPE_CHECKING:
     from .console import Console, ConsoleOptions, RenderResult
 
 STRIP_CONTROL_CODES: Final = [
+    0,  # Null
     7,  # Bell
     8,  # Backspace
     11,  # Vertical tab
     12,  # Form feed
     13,  # Carriage return
+    27,  # Escape
 ]
 _CONTROL_STRIP_TRANSLATE: Final = {
     _codepoint: None for _codepoint in STRIP_CONTROL_CODES
 }
 
 CONTROL_ESCAPE: Final = {
+    0: "\\0",
     7: "\\a",
     8: "\\b",
     11: "\\v",
     12: "\\f",
     13: "\\r",
+    27: "\\x1b",
 }
 
 CONTROL_CODES_FORMAT: Dict[int, Callable[..., str]] = {

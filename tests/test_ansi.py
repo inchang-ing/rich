@@ -102,3 +102,16 @@ def test_decode_newlines():
     assert Text.from_ansi("Hello\nWorld\n").plain == "Hello\nWorld\n"
     assert Text.from_ansi("Hello\nWorld\n\n").plain == "Hello\nWorld\n\n"
     assert Text.from_ansi("\nHello\nWorld\n\n").plain == "\nHello\nWorld\n\n"
+
+
+def test_from_ansi_neutralizes_unmatched_escape_bytes():
+    """Unmatched escape bytes must not survive into plain text.
+
+    A NUL between ESC and the sequence body bypassed re_ansi, so the raw
+    bytes reached the terminal, which ignores NULs and executed the
+    sequence anyway (screen clearing, cursor movement, output spoofing).
+    https://github.com/Textualize/rich/issues/4233
+    """
+    assert Text.from_ansi("\x1b\x00[2J").plain == "[2J"
+    assert Text.from_ansi("safe\x1b~inject").plain == "safe~inject"
+    assert Text.from_ansi("\x1b[31mred\x1b[0m").plain == "red"
